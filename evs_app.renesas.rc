@@ -1,0 +1,6 @@
+service evs_app.renesas /system/bin/evs_app.renesas
+    class early_hal
+    priority -20
+    user automotive_evs
+    group automotive_evs
+    oneshot

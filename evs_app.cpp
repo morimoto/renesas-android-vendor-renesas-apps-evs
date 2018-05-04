@@ -103,7 +103,7 @@ int main(int /* argc */, char** /* argv */)
         SubscribeOptions optionsData[1] = {
                 {
                     .propId = static_cast<int32_t>(VehicleProperty::GEAR_SELECTION),
-                    .flags = SubscribeFlags::DEFAULT
+                    .flags = SubscribeFlags::EVENTS_FROM_CAR
                 }
         };
         hidl_vec<SubscribeOptions> options;

@@ -1,4 +1,4 @@
-service evs_app.gl /vendor/bin/evs_app.gl
+service evs_app.gl /vendor/bin/evs_app.gl --hw
     class hal
     priority -20
     user automotive_evs

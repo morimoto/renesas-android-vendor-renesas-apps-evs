@@ -58,7 +58,7 @@ int main(int /* argc */, char** /* argv */)
 
     // Load our configuration information
     ConfigManager config;
-    config.initialize("/system/etc/automotive/evs/config.json");
+    config.initialize("/vendor/etc/automotive/evs/config.json");
 
     // Set thread pool size to one to avoid concurrent events from the HAL.
     // This pool will handle the EvsCameraStream callbacks.

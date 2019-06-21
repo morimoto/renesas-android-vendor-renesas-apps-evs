@@ -1,6 +1,19 @@
-service evs_app.renesas /system/bin/evs_app.renesas
+service evs_app.renesas /vendor/bin/evs_app.renesas
     class early_hal
     priority -20
     user automotive_evs
     group automotive_evs
-    oneshot
+    disabled # will not automatically start with its class; must be explictly started.
+
+
+# Start evs
+on early-init
+    start vendor.vehicle-hal-2.0
+    start vendor.evs-1-0
+
+on property:init.svc.surfaceflinger=running && property:ro.boot.evs.app=google
+    start evs_app
+
+on early-init && property:ro.boot.evs.app=renesas
+    start evs_manager
+    start evs_app.renesas

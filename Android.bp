@@ -1,0 +1,75 @@
+cc_binary {
+    name: "evs_app.gl",
+    vendor: true,
+    defaults: ["hidl_defaults"],
+    srcs: [
+        "evs_app.cpp",
+        "EvsStateControl.cpp",
+        "RenderBase.cpp",
+        "RenderDirectView.cpp",
+        "RenderTopView.cpp",
+        "ConfigManager.cpp",
+        "glError.cpp",
+        "shader.cpp",
+        "TexWrapper.cpp",
+        "VideoTex.cpp",
+        "StreamHandler.cpp",
+        "WindowSurface.cpp",
+        "FormatConvert.cpp",
+        "RenderPixelCopy.cpp"],
+    cflags: [
+        "-DLOG_TAG=\"EvsApp.gl\"",
+        "-DGL_GLEXT_PROTOTYPES",
+        "-DEGL_EGLEXT_PROTOTYPES",
+        "-DNO_INPUT",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+    ],
+    strip: {
+        keep_symbols: true,
+    },
+    init_rc: ["evs_app.gl.rc"],
+    header_libs: [
+        "libgui_headers",
+    ],
+    shared_libs: [
+        "libbase",
+        "libbinder",
+        "libhidlbase",
+        "liblog",
+        "libutils",
+        "libui",
+        "libEGL",
+        "libGLESv2",
+        "libpng",
+        "android.hidl.token@1.0-utils",
+        "android.hardware.automotive.evs@1.0",
+        "android.hardware.automotive.vehicle@2.0",
+        "android.hardware.graphics.bufferqueue@1.0",
+        "android.hardware.graphics.bufferqueue@2.0",
+    ],
+    static_libs: [
+        "libjsoncpp",
+    ],
+    required: [
+        "evs_app.gl_CarFromTop.png",
+        "evs_app.gl_LabeledChecker.png",
+    ],
+}
+
+prebuilt_etc {
+    name: "evs_app.gl_CarFromTop.png",
+    vendor: true,
+    sub_dir: "automotive/evs",
+    src: "CarFromTop.png",
+    filename_from_src: true,
+}
+
+prebuilt_etc {
+    name: "evs_app.gl_LabeledChecker.png",
+    vendor: true,
+    sub_dir: "automotive/evs",
+    src: "LabeledChecker.png",
+    filename_from_src: true,
+}

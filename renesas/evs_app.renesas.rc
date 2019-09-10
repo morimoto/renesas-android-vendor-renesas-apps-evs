@@ -12,7 +12,7 @@ on early-init
     start vendor.evs-1-0
 
 on property:init.svc.surfaceflinger=running && property:ro.boot.evs.app=google
-    start evs_app
+    start evs_app.gl
 
 on early-init && property:ro.boot.evs.app=renesas
     start evs_manager

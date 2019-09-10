@@ -25,10 +25,10 @@
 #include <inttypes.h>
 #include <utils/SystemClock.h>
 #include <binder/IServiceManager.h>
+#include <android-base/properties.h>
 
 static bool isSfReady() {
-    const android::String16 serviceName("SurfaceFlinger");
-    return android::defaultServiceManager()->checkService(serviceName) != nullptr;
+    return android::base::GetProperty("init.svc.surfaceflinger", "") == "running";
 }
 
 // TODO:  Seems like it'd be nice if the Vehicle HAL provided such helpers (but how & where?)

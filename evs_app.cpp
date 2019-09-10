@@ -97,7 +97,8 @@ int main(int argc, char** argv)
 
     // Load our configuration information
     ConfigManager config;
-    if (!config.initialize("/system/etc/automotive/evs/config.json")) {
+
+    if (!config.initialize("/vendor/etc/automotive/evs/config.json")) {
         ALOGE("Missing or improper configuration for the EVS application.  Exiting.");
         return 1;
     }

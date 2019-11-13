@@ -5,15 +5,9 @@ service evs_app.renesas /vendor/bin/evs_app.renesas
     group automotive_evs
     disabled # will not automatically start with its class; must be explictly started.
 
-
-# Start evs
-on early-init
-    start vendor.vehicle-hal-2.0
-    start vendor.evs-1-0
-
 on property:init.svc.surfaceflinger=running && property:ro.boot.evs.app=google
     start evs_app.gl
 
-on early-init && property:ro.boot.evs.app=renesas
+on coldboot_done && property:ro.boot.evs.app=renesas
     start evs_manager
     start evs_app.renesas

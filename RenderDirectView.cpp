@@ -18,7 +18,8 @@
 #include "VideoTex.h"
 #include "glError.h"
 #include "shader.h"
-#include "shader_undistortedTex.h"
+#include "shader_simpleTex.h"
+#include "shader_pincushionTex.h"
 
 #include <log/log.h>
 #include <math/mat4.h>
@@ -40,9 +41,16 @@ bool RenderDirectView::activate() {
 
     // Load our shader program if we don't have it already
     if (!mShaderProgram) {
-        mShaderProgram = buildShaderProgram(vtxShader_undistortedTexture,
-                                            pixShader_undistortedTexture,
-                                            "undistortedTexture");
+        //Check if distortion should be corrected
+        if(mCameraInfo.distort == "pincushion") {
+            mShaderProgram = buildShaderProgram(vtxShader_pincushionTexture,
+                                            pixShader_pincushionTexture,
+                                            "pincushionTexture");
+        } else {
+            mShaderProgram = buildShaderProgram(vtxShader_simpleTexture,
+                                            pixShader_simpleTexture,
+                                            "simpleTexture");
+        }
         if (!mShaderProgram) {
             ALOGE("Error buliding shader program");
             return false;

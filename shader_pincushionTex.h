@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-#ifndef SHADER_SIMPLE_TEX_H
-#define SHADER_SIMPLE_TEX_H
+#ifndef SHADER_UNDISTORTED_TEX_H
+#define SHADER_UNDISTORTED_TEX_H
 
-const char vtxShader_undistortedTexture[] = ""
+const char vtxShader_pincushionTexture[] = ""
         "#version 300 es                    \n"
         "layout(location = 0) in vec4 pos;  \n"
         "layout(location = 1) in vec2 tex;  \n"
@@ -29,7 +29,7 @@ const char vtxShader_undistortedTexture[] = ""
         "   uv = tex;                       \n"
         "}                                  \n";
 
-        const char pixShader_undistortedTexture[] =
+        const char pixShader_pincushionTexture[] =
         "#version 300 es                                              \n"
         "precision highp float;                                       \n"
         "uniform sampler2D tex;                                       \n"
@@ -64,4 +64,4 @@ const char vtxShader_undistortedTexture[] = ""
         "    color = texel;                                           \n"
         "}                                                            \n";
 
-#endif // SHADER_SIMPLE_TEX_H
+#endif // SHADER_UNDISTORTED_TEX_H

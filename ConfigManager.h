@@ -30,6 +30,7 @@ public:
         float pitch = 0;    // positive upward (ie: right hand rule about local x axis)
         float hfov  = 0;    // radians
         float vfov  = 0;    // radians
+        std::string distort = "";  // Distortion type
     };
 
     bool initialize(const char* configFileName);

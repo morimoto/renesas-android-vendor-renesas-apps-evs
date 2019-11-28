@@ -136,6 +136,9 @@ bool ConfigManager::initialize(const char* configFileName)
             float hfov  = node.get("hfov", 0).asFloat();
             float vfov  = node.get("vfov", 0).asFloat();
 
+            Json::Value distortNode = node.get("distort", "none");
+            const char *distort = distortNode.asCString();
+
             // Wrap the direction angles to be in the 180deg to -180deg range
             // Rotate 180 in yaw if necessary to flip the pitch into the +/-90degree range
             pitch = normalizeToPlusMinus180degrees(pitch);
@@ -178,6 +181,7 @@ bool ConfigManager::initialize(const char* configFileName)
             info.vfov        = vfov  * kDegreesToRadians;
             info.cameraId    = cameraId;
             info.function    = function;
+            info.distort     = distort;
 
             mCameras.push_back(info);
         }

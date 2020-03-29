@@ -19,7 +19,7 @@
 #include <gui/SurfaceComposerClient.h>
 #include <gui/ISurfaceComposer.h>
 #include <gui/Surface.h>
-#include <ui/DisplayInfo.h>
+#include <ui/DisplayConfig.h>
 
 using namespace android;
 
@@ -40,26 +40,15 @@ WindowSurface::WindowSurface() {
         return;
     }
 
-    DisplayInfo mainDpyInfo;
-    err = SurfaceComposerClient::getDisplayInfo(mainDpy, &mainDpyInfo);
+    DisplayConfig mainDpyCfg;
+    err = SurfaceComposerClient::getActiveDisplayConfig(mainDpy, &mainDpyCfg);
     if (err != NO_ERROR) {
         fprintf(stderr, "ERROR: unable to get display characteristics\n");
         return;
     }
 
-    uint32_t width, height;
-    if (mainDpyInfo.orientation != DISPLAY_ORIENTATION_0 &&
-            mainDpyInfo.orientation != DISPLAY_ORIENTATION_180) {
-        // rotated
-        width = mainDpyInfo.h;
-        height = mainDpyInfo.w;
-    } else {
-        width = mainDpyInfo.w;
-        height = mainDpyInfo.h;
-    }
-
     sp<SurfaceControl> sc = surfaceComposerClient->createSurface(
-            String8("Benchmark"), width, height,
+            String8("Benchmark"), mainDpyCfg.resolution.width, mainDpyCfg.resolution.height,
             PIXEL_FORMAT_RGBX_8888, ISurfaceComposerClient::eOpaque);
     if (sc == NULL || !sc->isValid()) {
         fprintf(stderr, "Failed to create SurfaceControl\n");

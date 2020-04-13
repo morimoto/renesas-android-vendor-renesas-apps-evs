@@ -4,3 +4,6 @@ service evs_app.gl /vendor/bin/evs_app.gl --hw
     user automotive_evs
     group automotive_evs
     disabled # will not automatically start with its class; must be explictly started.
+
+on property:init.svc.surfaceflinger=running && property:ro.boot.evs.app=google
+    start evs_app.gl

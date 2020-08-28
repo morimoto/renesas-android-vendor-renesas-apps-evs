@@ -14,7 +14,6 @@ cc_binary {
         "TexWrapper.cpp",
         "VideoTex.cpp",
         "StreamHandler.cpp",
-        "WindowSurface.cpp",
         "FormatConvert.cpp",
         "RenderPixelCopy.cpp"],
     cflags: [

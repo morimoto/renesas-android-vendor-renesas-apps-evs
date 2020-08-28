@@ -5,10 +5,13 @@
     "frontExtent" : 44.7,
     "rearExtent" : 40
   },
-  "display" : {
-    "frontRange" : 200,
-    "rearRange" : 200
-  },
+  "displays" : [
+    {
+      "displayPort" : 1,
+      "frontRange" : 200,
+      "rearRange" : 200
+    }
+  ],
   "graphic" : {
     "frontPixel" : 23,
     "rearPixel" : 223

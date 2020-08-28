@@ -15,19 +15,16 @@ cc_binary {
         "VideoTex.cpp",
         "StreamHandler.cpp",
         "FormatConvert.cpp",
-        "RenderPixelCopy.cpp"],
+        "RenderPixelCopy.cpp"
+    ],
     cflags: [
         "-DLOG_TAG=\"EvsApp.gl\"",
         "-DGL_GLEXT_PROTOTYPES",
         "-DEGL_EGLEXT_PROTOTYPES",
-        "-DNO_INPUT",
         "-Wall",
         "-Wextra",
         "-Werror",
     ],
-    strip: {
-        keep_symbols: true,
-    },
     init_rc: ["evs_app.gl.rc"],
     header_libs: [
         "libgui_headers",
@@ -43,7 +40,10 @@ cc_binary {
         "libGLESv2",
         "libpng",
         "android.hidl.token@1.0-utils",
+        "libcamera_metadata",
+        "android.hardware.camera.device@3.2",
         "android.hardware.automotive.evs@1.0",
+        "android.hardware.automotive.evs@1.1",
         "android.hardware.automotive.vehicle@2.0",
         "android.hardware.graphics.bufferqueue@1.0",
         "android.hardware.graphics.bufferqueue@2.0",

@@ -40,36 +40,26 @@ using android::base::EqualsIgnoreCase;
 using android::hardware::configureRpcThreadpool;
 using android::hardware::joinRpcThreadpool;
 
-namespace {
-
 android::sp<IEvsEnumerator> pEvs;
 android::sp<IEvsDisplay> pDisplay;
 EvsStateControl *pStateController;
+sp<EvsVehicleListener> pEvsListener;
 
-void sigHandler(int sig) {
-    LOG(ERROR) << "evs_app is being terminated on receiving a signal " << sig;
+void sigHandler(const sigset_t &sigset) {
+    int signum = 0;
+    const int ret = sigwait(&sigset, &signum);
+    LOG_ALWAYS_FATAL_IF(ret, "Unable to subscribe on sigwait.");
+    LOG(ERROR) << "evs_app is being terminated on receiving a signal " << signum;
+    // Attempt to clean up the resources
     if (pEvs != nullptr) {
-        // Attempt to clean up the resources
         pStateController->postCommand({EvsStateControl::Op::EXIT, 0, 0}, true);
         pStateController->terminateUpdateLoop();
         pEvs->closeDisplay(pDisplay);
     }
-
-    android::hardware::IPCThreadState::self()->stopProcess();
-    exit(EXIT_FAILURE);
+    if (pEvsListener != nullptr) {
+        pEvsListener->terminateUpdateLoop();
+    }
 }
-
-void registerSigHandler() {
-    struct sigaction sa;
-    sigemptyset(&sa.sa_mask);
-    sa.sa_flags = 0;
-    sa.sa_handler = sigHandler;
-    sigaction(SIGABRT, &sa, nullptr);
-    sigaction(SIGTERM, &sa, nullptr);
-    sigaction(SIGINT,  &sa, nullptr);
-}
-
-} // namespace
 
 
 // Helper to subscribe to VHal notifications
@@ -123,8 +113,13 @@ int main(int argc, char** argv)
 {
     LOG(INFO) << "EVS app starting";
 
-    // Register a signal handler
-    registerSigHandler();
+    sigset_t sigset;
+    sigemptyset(&sigset);
+    sigaddset(&sigset, SIGABRT);
+    sigaddset(&sigset, SIGTERM);
+    sigaddset(&sigset, SIGINT);
+    sigprocmask(SIG_BLOCK, &sigset, nullptr);
+    std::thread handlingThread (sigHandler, sigset);
 
     // Set up default behavior, then check for command line options
     bool useVehicleHal = true;
@@ -201,7 +196,7 @@ int main(int argc, char** argv)
     configureRpcThreadpool(1, false /* callerWillJoin */);
 
     // Construct our async helper object
-    sp<EvsVehicleListener> pEvsListener = new EvsVehicleListener();
+    pEvsListener = new EvsVehicleListener();
 
     // Get the EVS manager service
     LOG(INFO) << "Acquiring EVS Enumerator";
@@ -265,6 +260,10 @@ int main(int argc, char** argv)
     // Run forever, reacting to events as necessary
     LOG(INFO) << "Entering running state";
     pEvsListener->run(pStateController);
+
+    if (handlingThread.joinable()) {
+        handlingThread.join();
+    }
 
     // In normal operation, we expect to run forever, but in some error conditions we'll quit.
     // One known example is if another process preempts our registration for our service name.
